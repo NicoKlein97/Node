@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>Node</name>
 	<comment></comment>
 	<projects>
@@ -13,5 +14,14 @@
 	</buildSpec>
 	<natures>
 		<nature>com.palantir.typescript.typeScriptNature</nature>
+=======
+	<name>EIA2_S18_Node</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+>>>>>>> branch 'master' of https://github.com/JirkaDellOro/EIA2_S18_Node.git
 	</natures>
 </projectDescription>
