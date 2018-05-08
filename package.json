@@ -1,0 +1,15 @@
+{
+	"name" : "nodetest",
+	"version" : "1.0.0",
+	"description" : "First Server Test",
+	"author" : "Jirka",
+	"main" : "NodeTest.js",
+	"scripts" : {
+		"start" : "node NodeTest.js"
+	},
+	"engines" : {
+		"node" : "6.11.1"
+	},
+	"dependencies" : {
+	}
+}
