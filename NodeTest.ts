@@ -1,32 +1,40 @@
 import * as Http from "http";
 import * as Url from "url";
 
-let port: number = 8100;
+namespace Server {
+    interface AssocStringString {
+        [key: string]: string;
+    }
 
-let server: Http.Server = Http.createServer();
-server.addListener("listening", handleListen);
-server.addListener("request", handleRequest);
-server.listen(port);
+    let port: number = process.env.PORT;
+    if (port == undefined)
+        port = 8100;
 
-//console.log(server);
+    let server: Http.Server = Http.createServer();
+    server.addListener("listening", handleListen);
+    server.addListener("request", handleRequest);
+    server.listen(port);
 
-function handleListen(): void {
-    console.log("Ich hÃ¶re?");
-}
+    function handleListen(): void {
+        console.log("Ich höre?");
+    }
 
-function handleRequest(_request: Http.IncomingMessage, _response: Http.ServerResponse): void {
-    console.log("Ich hÃ¶re Stimmen!");
+    function handleRequest(_request: Http.IncomingMessage, _response: Http.ServerResponse): void {
+        console.log("Ich höre Stimmen!");
 
-    let query: Url.Url = Url.parse(_request.url, true).query;
-    console.log(query);
+        let query: AssocStringString = Url.parse(_request.url, true).query;
+        let a: number = parseInt(query["a"]);
+        let b: number = parseInt(query["b"]);
 
+        for (let key in query) 
+            console.log(query[key]);
 
-    _response.setHeader("content-type", "text/html; charset=utf-8");
-    _response.write("Ich habe dich gehÃ¶rt");
+        _response.setHeader("content-type", "text/html; charset=utf-8");
+        _response.setHeader("Access-Control-Allow-Origin", "*");
 
-    /*   for (let key in query)
-           _response.write(key + ":" + query[key]);
-       _response.write("Das Ergebnis ist: " + (query["a"] + query["b"]));
-   */
-    _response.end();
+        _response.write("Ich habe dich gehört<br/>");
+        _response.write("Das Ergebnis ist: " + (a + b));
+
+        _response.end();
+    }
 }
