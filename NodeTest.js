@@ -23,8 +23,9 @@ var Server;
         _response.setHeader("content-type", "text/html; charset=utf-8");
         _response.setHeader("Access-Control-Allow-Origin", "*");
         _response.write("Ich habe dich geh�rt<br/>");
-        _response.write(a);
-        _response.write("Das Ergebnis ist: " + "a" + "b");
+        for (let key in query)
+            _response.write("eingegebene Infos: " + (query[key]) + "<br>");
+        _response.write("Ergebnis: " + (a + b));
         _response.end();
     }
 })(Server || (Server = {}));

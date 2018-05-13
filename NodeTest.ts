@@ -26,16 +26,17 @@ namespace Server {
         let a: number = parseInt(query["a"]);
         let b: number = parseInt(query["b"]);
 
-        for (let key in query) 
+
+        for (let key in query)
             console.log(query[key]);
 
         _response.setHeader("content-type", "text/html; charset=utf-8");
         _response.setHeader("Access-Control-Allow-Origin", "*");
 
         _response.write("Ich habe dich gehört<br/>");
-        _response.write(a);
-        _response.write("Das Ergebnis ist: " + "a" + "b");
-
+        for (let key in query)
+            _response.write("eingegebene Infos: " + (query[key]) + "<br>");
+        _response.write("Ergebnis: " + (a + b));
         _response.end();
     }
 }
