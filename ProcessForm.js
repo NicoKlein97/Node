@@ -1,6 +1,5 @@
 var Aufgabe6;
 (function (Aufgabe6) {
-    window.addEventListener("load", init);
     let address = "https://nodejsstudium256219.herokuapp.com";
     let inputs = document.getElementsByTagName("input");
     function init(_event) {
