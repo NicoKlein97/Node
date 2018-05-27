@@ -2,6 +2,7 @@ import * as Http from "http";
 import * as Url from "url";
 
 namespace Server {
+    let counter = 0;
     interface AssocStringString {
         [key: string]: string;
     }
@@ -25,6 +26,8 @@ namespace Server {
         let query: AssocStringString = Url.parse(_request.url, true).query;
         let a: number = parseInt(query["a"]);
         let b: number = parseInt(query["b"]);
+        let c: number = parseInt(query["c"]);
+        let d: number = parseInt(query["d"]);
 
 
         for (let key in query)
@@ -34,9 +37,16 @@ namespace Server {
         _response.setHeader("Access-Control-Allow-Origin", "*");
 
         _response.write("Ich habe dich gehört<br/>");
-        for (let key in query)
-            _response.write("eingegebene Infos: " + (query[key]) + "<br>");
-        _response.write("Ergebnis: " + (a + b));
+
+        for (let key in query) {
+            counter++;
+            _response.write("Zahl " + counter + ": " + (query[key]) + "<br>");
+        }
+
+        _response.write("Summe: " + (a + b + c + d) + "<br>");
+        _response.write("Differenz: " + (a - b - c - d) + "<br>");
+        _response.write("Produkt: " + (a * b * c * d) + "<br>");
+        _response.write("Quotient: " + (a / b / c / d) + "<br>");
         _response.end();
     }
 }
