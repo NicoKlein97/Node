@@ -1,6 +1,6 @@
 namespace Aufgabe6 {
     window.addEventListener("load", init);
-    let address: string = "http://localhost:8100/";
+    let address: string = "https://nodejsstudium256219.com";
 
     let inputs: NodeListOf<HTMLInputElement> = document.getElementsByTagName("input");
 
