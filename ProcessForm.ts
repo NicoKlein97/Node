@@ -1,6 +1,6 @@
 namespace Aufgabe6 {
     window.addEventListener("load", init);
-    let address: string = "https://projekteia2.herokuapp.com";
+    let address: string = "http://localhost:8100/";
 
     let inputs: NodeListOf<HTMLInputElement> = document.getElementsByTagName("input");
 
