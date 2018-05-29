@@ -1,17 +1,15 @@
 
-    // Struktur des heterogenen assoziativen Arrays als Datensatz für eine studierende Person
-     interface Studi {
-        name: string;
+  
+     interface Student {
         firstname: string;
-        matrikel: number;
+        name: string;
+        studiengang: string; 
         age: number;
-        gender: boolean;
-        studiengang: string;
+        gender: boolean; 
+        matrikel: number;
     }
 
-    // Struktur des homogenen assoziativen Arrays, bei dem ein Datensatz der Matrikelnummer zugeordnet ist
-     interface Studis {         [matrikel: string]: Studi;
+     interface Studenten {         
+     [matrikel: string]: Student;
     }
  
-    // Homogenes assoziatives Array zur Speicherung einer Person unter der Matrikelnummer
-     let studiHomoAssoc: Studis = {};  
