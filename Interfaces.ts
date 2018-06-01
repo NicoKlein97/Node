@@ -1,15 +1,20 @@
-
+namespace Interfaces {
   
-     interface Student {
-        firstname: string;
-        name: string;
-        studiengang: string; 
-        age: number;
-        gender: boolean; 
-        matrikel: number;
-    }
+  export interface Studi {
+    name: string;
+    firstname: string;
+    matrikel: number;
+    age: number;
+    gender: boolean;
+    course: string;
+  }
 
-     interface Studenten {         
-     [matrikel: string]: Student;
-    }
- 
+  export interface Studis {
+    [matrikel: string]: Studi;
+  }
+  
+  export interface UrlObject {
+    [key: string]: string
+  }
+
+}

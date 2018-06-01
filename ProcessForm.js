@@ -1,68 +1,78 @@
-//let test = document.getElementsByTagName("body")[0];
-window.addEventListener("load", init);
-let address = "http://localhost:8100";
-let input = document.getElementsByTagName("input");
-function init(_event) {
-    console.log("Init");
-    let insertButton = document.getElementById("insert");
-    let refreshButton = document.getElementById("refresh");
-    let searchButton = document.getElementById("checkSearch");
-    insertButton.addEventListener("click", insert);
-    refreshButton.addEventListener("click", refresh);
-    searchButton.addEventListener("click", search);
-}
-function insert(_event) {
-    let genderButton = document.getElementById("male");
-    let matrikel = input[2].value;
-    let student;
-    student = {
-        firstname: input[0].value,
-        name: input[1].value,
-        studiengang: document.getElementsByTagName("select").item(0).value,
-        age: parseInt(input[3].value),
-        gender: genderButton.checked,
-        matrikel: parseInt(matrikel),
-    };
-    let convert = JSON.stringify(student);
-    console.log(convert);
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", address + "?command=insert&data=" + convert, true);
-    xhr.addEventListener("readystatechange", handleStateChangeInsert);
-    xhr.send();
-}
-function handleStateChangeInsert(_event) {
-    var xhr = _event.target;
-    if (xhr.readyState == XMLHttpRequest.DONE) {
-        alert(xhr.response);
+var Client;
+(function (Client) {
+    const adress = "https://nodejsstudium256219.herokuapp.com/";
+    let inputs;
+    let searchResult;
+    let refreshArea;
+    function init(_event) {
+        inputs = document.getElementsByTagName("input");
+        let insertButton = document.getElementById("insert");
+        let refreshButton = document.getElementById("refresh");
+        let searchButton = document.getElementById("search");
+        insertButton.addEventListener("click", insert);
+        refreshButton.addEventListener("click", refresh);
+        searchButton.addEventListener("click", search);
+        searchResult = document.getElementById("search-result");
+        refreshArea = document.getElementsByTagName("textarea")[0];
     }
-}
-function refresh(_event) {
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", address + "?command=refresh", true);
-    xhr.addEventListener("readystatechange", handleStateChangeRefresh);
-    xhr.send();
-}
-function handleStateChangeRefresh(_event) {
-    let output = document.getElementsByTagName("textarea")[0];
-    output.value = "";
-    let xhr = _event.target;
-    if (xhr.readyState == XMLHttpRequest.DONE) {
-        output.value += xhr.response;
+    // Insert Studi
+    function insert() {
+        let genderButton = document.getElementById("male");
+        let matrikel = inputs[2].value;
+        let json = JSON.stringify({
+            name: inputs[0].value,
+            firstname: inputs[1].value,
+            matrikel: parseInt(matrikel),
+            age: parseInt(inputs[3].value),
+            gender: genderButton.checked,
+            course: inputs[6].value
+        });
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", adress + "?action=insert&json=" + json, true);
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200)
+                alert(xhr.responseText);
+        };
     }
-}
-function search(_event) {
-    let mNumber = input[6].value;
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", address + "?command=search&searchFor=" + mNumber, true);
-    xhr.addEventListener("readystatechange", handleStateChangeSearch);
-    xhr.send();
-}
-function handleStateChangeSearch(_event) {
-    let output = document.getElementsByTagName("textarea")[1];
-    output.value = "";
-    let xhr = _event.target;
-    if (xhr.readyState == XMLHttpRequest.DONE) {
-        output.value += xhr.response;
+    // Refresh Studis
+    function refresh() {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", adress + "?action=refresh", true);
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                let studis = JSON.parse(xhr.responseText.toString());
+                let answer = "";
+                for (let studi in studis) {
+                    answer += `Matrikel: ${studi}\n`;
+                    answer += `Lastname: ${studis[studi].name}\n`;
+                    answer += `Firstname: ${studis[studi].firstname}\n`;
+                    answer += `Age: ${studis[studi].age}\n`;
+                    answer += `Gender: ${studis[studi] ? "male" : "female"}\n`;
+                    answer += `Course: ${studis[studi].course}\n\n`;
+                }
+                refreshArea.innerText = answer;
+            }
+        };
     }
-}
+    // Search Studi
+    function search() {
+        let searchKey = inputs[7].value;
+        if (searchKey != "") {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", adress + "?action=search&matrikel=" + searchKey, true);
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                    searchResult.innerText = xhr.responseText;
+                }
+            };
+        }
+        else {
+            searchResult.innerText = "Bitte Suchanfrage eingeben!";
+        }
+    }
+    window.addEventListener("load", init);
+})(Client || (Client = {}));
 //# sourceMappingURL=ProcessForm.js.map

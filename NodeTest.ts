@@ -2,51 +2,55 @@ import * as Http from "http";
 import * as Url from "url";
 
 namespace Server {
-    let counter = 0;
-    interface AssocStringString {
-        [key: string]: string;
-    }
 
-    let port: number = process.env.PORT;
-    if (port == undefined)
-        port = 8100;
+  let studis: Interfaces.Studis = {};
 
-    let server: Http.Server = Http.createServer();
-    server.addListener("listening", handleListen);
-    server.addListener("request", handleRequest);
-    server.listen(port);
+  const port: number = process.env.PORT || 8100;
+  const server: Http.Server = Http.createServer((_request: Http.IncomingMessage, _response: Http.ServerResponse) => {
+    _response.setHeader("content-type", "text/html; charset=utf-8");
+    _response.setHeader("Access-Control-Allow-Origin", "*");
 
-    function handleListen(): void {
-        console.log("Ich höre?");
-    }
+    //_response.end(); => Causing errors for some reason...
+  });
 
-    function handleRequest(_request: Http.IncomingMessage, _response: Http.ServerResponse): void {
-        console.log("Ich höre Stimmen!");
+  server.addListener("request", filterRequest);
+  server.listen(port);
 
-        let query: AssocStringString = Url.parse(_request.url, true).query;
-        let a: number = parseInt(query["a"]);
-        let b: number = parseInt(query["b"]);
-        let c: number = parseInt(query["c"]);
-        let d: number = parseInt(query["d"]);
+  function filterRequest(_request: Http.IncomingMessage, _response: Http.ServerResponse): void {
 
+    let query: Interfaces.UrlObject = Url.parse(_request.url, true).query;
 
-        for (let key in query)
-            console.log(query[key]);
+    if (query["action"]) {
 
-        _response.setHeader("content-type", "text/html; charset=utf-8");
-        _response.setHeader("Access-Control-Allow-Origin", "*");
+      // Insert Studi
+      if (query["action"] == "insert") {
+        let studi: Interfaces.Studi = <Interfaces.Studi>JSON.parse(query["json"].toString());
+        studis[studi.matrikel] = studi;
+        _response.write("Student added!");
+      }
 
-        _response.write("Ich habe dich gehört<br/>");
+      // Refresh Studis
+      if (query["action"] == "refresh") {
+        _response.write(JSON.stringify(studis));
+        console.log("refresh");
+      }
 
-        for (let key in query) {
-            counter++;
-            _response.write("Zahl " + counter + ": " + (query[key]) + "<br>");
+      // Search Studi
+      if (query["action"] == "search") {
+
+        let matrikel: string = JSON.parse(query["matrikel"].toString());
+
+        if (studis[matrikel]) {
+          _response.write(JSON.stringify(studis[matrikel]));
+        }
+        else {
+          _response.write("Kein Student gefunden! Bitte Suchanfrage anpassen");
         }
 
-        _response.write("Summe: " + (a + b + c + d) + "<br>");
-        _response.write("Differenz: " + (a - b - c - d) + "<br>");
-        _response.write("Produkt: " + (a * b * c * d) + "<br>");
-        _response.write("Quotient: " + (a / b / c / d) + "<br>");
-        _response.end();
+      }
+
+      // End Response
+      _response.end();
     }
+  }
 }

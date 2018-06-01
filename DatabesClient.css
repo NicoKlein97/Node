@@ -1,17 +1,21 @@
 * {
-	display: block;
-	vertical-align: top
+  display: block;
+  vertical-align: top
 }
 
 head {
-	display: none;
+  display: none;
 }
 
-
-input[type="radio"], input[type="checkbox"], input[type="number"], label {
-	display: inline;
+input[type="radio"], input[type="checkbox"], input[type="number"], label
+  {
+  display: inline;
 }
 
 button {
-	margin:1em 0em;
+  margin: 1em 0em;
+}
+
+datalist {
+  display: none;
 }
